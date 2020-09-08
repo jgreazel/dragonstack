@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import DragonAvatar from './DragonAvatar';
+import {Button} from 'react-bootstrap';
 
 const DEFAULT_DRAGON = {
     dragonId: '',
@@ -24,7 +25,13 @@ class Dragon extends Component{
     }
 
     render(){
-        return <DragonAvatar dragon={this.state.dragon}/>;
+        return (
+            <div>
+                <Button onClick={this.fetchDragon}>New Dragon</Button>
+                <DragonAvatar dragon={this.state.dragon}/>
+            </div>
+        
+        );
     }
 }
 export default Dragon;
