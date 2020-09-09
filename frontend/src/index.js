@@ -1,46 +1,22 @@
 import React from 'react';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import {render} from 'react-dom';
 import Generation from './components/Generation';
 import Dragon from './components/Dragon';
 import './index.css';
+import {generationReducer} from './reducers';
+import {generationActionCreator} from './actions/generation';
 
-const DEFAULT_GENERATION = {generationId: '', expiration: ''};
 
-const GENERATION_ACTION_TYPE = 'GENERATION_ACTION_TYPE';
-
-const generationReducer = (state, action) => {
-    if(action.type === GENERATION_ACTION_TYPE){
-        return {generation: action.generation}
-    }
-    return {
-        generation: DEFAULT_GENERATION
-    }
-}
-
-const store = createStore(generationReducer);
+const store = createStore(
+    generationReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 store.subscribe(()=>{
     console.log('store state update', store.getState())
 });
-
-store.dispatch({
-    type: GENERATION_ACTION_TYPE,
-    generation: {generationId: '', expiration: ''}
-    });
-
-const generationActionCreator = (payload) => {
-    return {
-        type: GENERATION_ACTION_TYPE,
-        generation: payload
-    };
-};
-
-const zooAction = generationActionCreator({
-    generationId: 'zoo', expiration: 'bar'
-})
-
-store.dispatch(zooAction);
 
 fetch('http://localhost:3000/generation')
     .then(response => response.json())
@@ -49,10 +25,12 @@ fetch('http://localhost:3000/generation')
     });
 
 render(
-    <div>
-        <h2>Dragon Stack</h2>
-        <Generation/>
-        <Dragon/>
-    </div>,
-    document.getElementById('root')
-)
+    <Provider store={store}>
+        <div>
+            <h2>Dragon Stack</h2>
+            <Generation />
+            <Dragon />
+        </div>
+    </Provider>,
+    document.getElementById("root")
+);
