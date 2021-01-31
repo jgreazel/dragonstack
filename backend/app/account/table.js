@@ -1,4 +1,3 @@
-const { response, use } = require('..');
 const pool = require('./../../databasePool');
 
 class AccountTable{
