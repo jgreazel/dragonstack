@@ -9,6 +9,7 @@ import {fetchAuthenticated} from './actions/account';
 import rootReducer from './reducers';
 import Root from './components/Root';
 import AccountDragons from './components/AccountDragons';
+import PublicDragons from './components/PublicDragons';
 import './index.css';
 
 const history = createBrowserHistory();
@@ -18,6 +19,7 @@ const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunk)
 );
+
 
 const AuthRoute = (props) => {
     if(!store.getState().account.loggedIn){
@@ -36,6 +38,7 @@ store.dispatch(fetchAuthenticated())
                     <Switch>
                         <Route exact path='/' component={Root}/>
                         <AuthRoute path='/account-dragons' component={AccountDragons} />
+                        <AuthRoute path='/public-dragons' component={PublicDragons}/>
                     </Switch>
                 </Router>
             </Provider>,

@@ -7,11 +7,22 @@ class AccountDragonRow extends Component{
 
     state={
         nickname: this.props.dragon.nickname,
-        edit: false
+        isPublic: this.props.dragon.isPublic,
+        saleValue: this.props.dragon.saleValue,
+        edit: false,
+
     }
 
     updateNickname = event =>{
         this.setState({nickname: event.target.value})
+    }
+
+    updateSaleValue = event => {
+        this.setState({saleValue: event.target.value})
+    }
+
+    updateIsPublic = event => {
+        this.setState({isPublic: event.target.checked})
     }
 
     toggleEdit = () =>{
@@ -20,12 +31,16 @@ class AccountDragonRow extends Component{
         })
     }
 
+    // no need for dragon elements to be included in global store -- local
     save = () =>{
         fetch(`${BACKEND.ADDRESS}/dragon/update`,{
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                dragonId: this.props.dragon.dragonId, nickname: this.state.nickname
+                dragonId: this.props.dragon.dragonId, 
+                nickname: this.state.nickname,
+                isPublic: this.state.isPublic,
+                saleValue: this.state.saleValue
             })
         })
         .then(response => response.json())
@@ -47,6 +62,7 @@ class AccountDragonRow extends Component{
         return <Button onClick={this.toggleEdit}>Edit</Button>
     }
 
+    // inividual row for account's owned dragons
     render(){
         return(
             <div>
@@ -58,9 +74,32 @@ class AccountDragonRow extends Component{
                 />
                 <br/>
                 <DragonAvatar dragon={this.props.dragon} />
-                {
-                    this.state.edit ? this.SaveButton : this.EditButton
-                }
+                <div>
+                    <span>
+                        Sale Value:{' '}
+                        <input 
+                            type='number' 
+                            disabled={!this.state.edit} 
+                            value={this.state.saleValue} 
+                            onChange={this.updateSaleValue}
+                        />
+                    </span>
+                    {' '}
+                    <span>
+                        Public:{' '}
+                        <input 
+                            type='checkbox'    
+                            disabled={!this.state.edit} 
+                            checked={this.state.isPublic} 
+                            onChange={this.updateIsPublic}
+                        />
+                    </span>
+                    {' '}
+                    {
+                        this.state.edit ? this.SaveButton : this.EditButton
+                    }
+                </div>
+                
             </div>
         )
     }
