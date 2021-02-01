@@ -8,8 +8,20 @@ class AccountDragonTable {
                 [accountId, dragonId],
                 (error, response) => {
                     if(error) return reject(error);
-
                     resolve();
+                }
+            )
+        })
+    }
+
+    static getAccountDragons({accountId}){
+        return new Promise((resolve, reject)=>{
+            pool.query(
+                'SELECT "dragonId" FROM accountDragon WHERE "accountId" = $1',
+                [accountId],
+                (error, response) => {
+                    if(error) return reject(error);
+                    resolve({accountDragons: response.rows});
                 }
             )
         })

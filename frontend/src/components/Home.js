@@ -17,5 +17,7 @@ class Home extends Component{
         )
     }
 }
+
+
 export default connect(null, {logout})(Home);
 
